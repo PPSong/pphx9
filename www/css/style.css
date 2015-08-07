@@ -1,0 +1,274 @@
+/*overwrite default*/
+
+.bar.bar-stable {
+    background-color: rgb(254, 87, 34);
+}
+
+.bar.bar-stable .title {
+    color: white;
+}
+
+.pane,
+.view {
+    background-color: rgb(241, 245, 248);
+}
+
+.button.button-positive {
+    border-color: rgb(254, 87, 34);
+    background-color: rgb(254, 87, 34);
+    color: #fff;
+}
+
+.tabs-striped.tabs-color-positive .tab-item.tab-item-active,
+.tabs-striped.tabs-color-positive .tab-item.active,
+.tabs-striped.tabs-color-positive .tab-item.activated {
+    margin-top: -2px;
+    color: rgb(0, 177, 127);
+    /* border: 0 solid #387ef5; */
+    border-top-width: 2px;
+}
+
+.tabs-striped.tabs-color-positive .tab-item {
+    color: rgba(0, 177, 127, 0.4);
+}
+
+.button.button-positive:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.button.button-positive.active,
+.button.button-positive.activated {
+    border-color: rgb(254, 87, 34);
+    background-color: rgb(254, 87, 34);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item {
+    border-color: #eee;
+}
+
+.card,
+.list-inset {
+    overflow: hidden;
+    margin: 5px 5px;
+    border-radius: 2px;
+    background-color: #fff;
+}
+
+.item-thumbnail-left > img:first-child,
+.item-thumbnail-left .item-image,
+.item-thumbnail-left .item-content > img:first-child,
+.item-thumbnail-left .item-content .item-image {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.modal {
+    background-color: #eee;
+}
+
+.card,
+.list-inset {
+    background-color: #eee;
+}
+
+.popup-container .popup {
+    width: 250px;
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+}
+
+.button.button-light.button-clear {
+    color: #fff;
+}
+
+.tabs-striped.tabs-color-positive .tab-item.tab-item-active,
+.tabs-striped.tabs-color-positive .tab-item.active,
+.tabs-striped.tabs-color-positive .tab-item.activated {
+    border-top-color: rgb(0, 177, 127);
+    border-top-style: solid;
+    border-top-width: 2px;
+}
+
+
+/*end overwrite default*/
+
+
+/* Empty. Add your own CSS if you like */
+
+.pp-card {
+    margin-bottom: 0px !important;
+}
+
+.pp-special-pic-head {
+    text-align: center;
+}
+
+.pp-special-pic-sm {
+    width: 100px;
+    height: auto;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.16), 0 4px 20px 0 rgba(0, 0, 0, 0.12);
+}
+
+.pp-special-pic-slide {
+    height: 320px;
+    width: 320px;
+}
+
+.pp-no-padding {
+    padding: 0px;
+}
+
+.pp-big-padding {
+    padding: 20px;
+}
+
+.pp-black {
+    color: #999;
+}
+
+.pp-space {
+    height: 40px;
+}
+
+.pp-shadow {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.pp-blue {
+    background-color: rgb(63, 86, 154);
+}
+
+.pp-forget-password {
+    padding-right: 10px;
+}
+
+.pp-logo {
+    width: 200px;
+    height: auto;
+}
+
+.pp-take-photo {
+    width: 80px;
+    height: auto;
+}
+
+.pp-text-center {
+    text-align: center
+}
+
+.pp-special-pic-big {
+    height: 200px;
+    width: 200px;
+}
+
+.pp-test {
+    padding: 0px
+}
+
+.pp-font-xs {
+    font-size: 10px;
+    padding: 0px
+}
+
+#pp-line-xs {
+    line-height: 20px;
+    font-size: 10px;
+    min-height: 25px;
+    margin: 0px
+}
+
+.messages {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-content: center;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.messages .message {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 10px;
+    -webkit-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
+    overflow: hidden;
+    text-align: left;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.time {
+    -webkit-box-flex: 0;
+    -moz-box-flex: 0;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    width: 120px;
+    text-align: center;
+    padding: 0 0 0 0;
+    -webkit-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
+    -webkit-transform: translate3d(10px, 0, 0);
+    -moz-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+}
+
+.time.slide-right {
+    -webkit-transform: translate3d(130px, 0, 0);
+    -moz-transform: translate3d(130px, 0, 0);
+    transform: translate3d(130px, 0, 0);
+}
+
+.messages.other .message {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    text-align: right;
+}
+
+.messages.other .message.slide-right {
+    -webkit-transform: translate3d(120px, 0, 0);
+    -moz-transform: translate3d(120px, 0, 0);
+    transform: translate3d(120px, 0, 0);
+}
+
+.messages.other span {
+    color: black;
+    background-color: #C7C7CC;
+}
+
+span.message {
+    background: #007AFF;
+    display: inline-block;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: left;
+    max-width: 240px;
+}
+
+img.middleImg {
+    width: 200px;
+    height: 200px;
+}

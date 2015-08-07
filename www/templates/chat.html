@@ -1,0 +1,22 @@
+<ion-view view-title="好友">
+    <ion-nav-bar class="bar-stable">
+        <ion-nav-back-button ng-click="myBack()">
+        </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content class="content-stable">
+        <div class="messages" ng-repeat="item in friendMessagesRQ.result | orderBy: 'createdTime'" ng-class="{other: item.toUserId == usersRQ.result[0]._id}">
+            <div class="message">
+                <span class="message">{{item.content}}</span>
+            </div>
+            <span am-time-ago="item.createdTime.$date"></span>
+        </div>
+    </ion-content>
+    <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
+        <label class="item-input-wrapper">
+            <input type="text" placeholder="输入甜言蜜语..." on-return="sendMessage()" ng-model="inputMessage" on-focus="inputUp()" on-blur="inputDown()" />
+        </label>
+        <button class="button button-clear" ng-disabled="sending || !inputMessage" ng-click="sendMessage()">
+            发送
+        </button>
+    </ion-footer-bar>
+</ion-view>

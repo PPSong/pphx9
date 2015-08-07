@@ -1,0 +1,12 @@
+<ion-modal-view view-title="setting">
+    <ion-header-bar class="bar-stable">
+        <div class="buttons">
+            <button class="button button-light button-clear icon ion-chevron-left" ng-click="closeBigSpecialPic()">
+            </button>
+        </div>
+    </ion-header-bar>
+    <ion-content padding="true" class="has-header padding pp-special-pic-head">
+        <img class="pp-special-pic-big" ng-src="{{curTarget.data.specialPic}}">
+        <button class="button button-positive button-block" ng-click="selectSuccess()">就是Ta了</button>
+    </ion-content>
+</ion-modal-view>

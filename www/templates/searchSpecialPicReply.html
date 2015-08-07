@@ -1,0 +1,24 @@
+<ion-view view-title="回复Ta的特征图片">
+    <ion-content padding="true" class="has-header">
+        <div style="text-align:center" ng-repeat="item in targets.data">
+            <div class="row" ng-if="$even">
+                <div class="col">
+                    <img class="pp-special-pic-sm" ng-src="{{targets.data[$index].specialPic}}" ng-click="checkBigSpecialPic(targets.data[$index])">
+                </div>
+                <div class="col" ng-if="targets.data[$index + 1]">
+                    <img class="pp-special-pic-sm" ng-src="{{targets.data[$index + 1].specialPic}}" ng-click="checkBigSpecialPic(targets.data[$index+1])">
+                </div>
+            </div>
+        </div>
+    </ion-content>
+    <div class="bar bar-footer bar-stable">
+        <div class="row pp-test">
+            <div class="col col-65 pp-font-xs">
+                也许ta尚未填写资料, 让我们帮你, 点击右侧, 系统会通知周边未更新资料的Ta
+            </div>
+            <div class="col">
+                <button id="pp-line-xs" class="button button-light button-block" ng-click="noTarget()">没有TA...</button>
+            </div>
+        </div>
+    </div>
+</ion-view>

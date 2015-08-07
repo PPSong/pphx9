@@ -1,0 +1,72 @@
+<ion-modal-view view-title="setting">
+    <ion-header-bar class="bar-stable">
+        <div class="buttons">
+            <button class="button button-light button-clear icon ion-chevron-left" ng-click="closeWaitForReply()">
+            </button>
+        </div>
+    </ion-header-bar>
+    <ion-content padding="true" class="has-header padding">
+        <a class="item item-thumbnail-left" href="#">
+            <img ng-src="{{curMeet.data.targetSpecialPic}}">
+            <div class="row">
+                <h2>待对方回复</h2>
+            </div>
+            <div class="row">
+                <p>发出</p>
+            </div>
+            <div class="row">
+                <div class="col pp-black"><i class="icon ion-android-time"> <span am-time-ago="item.createdTime.$date" class="pp-black"></span></i></div>
+            </div>
+        </a>
+         <ion-list class="pp-black">
+            <div class="list card pp-card">
+                <a class="item item-icon-left" href="#">
+                    <i class="icon ion-transgender"></i> 对方性别
+                    <span class="item-note">{{curMeet.data.specialInfo.sex}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionPlace(targetSpecialInfo.data, targetSpecialInfo.data.sex)">
+                    <i class="icon ion-location"></i> 发出时您所在的场所
+                    <span class="item-note">{{curMeet.data.specialInfo.place.name}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionHair(targetSpecialInfo.data, targetSpecialInfo.data.sex)">
+                    <i class="icon ion-ios-person"></i> 头发
+                    <span class="item-note">{{curMeet.data.specialInfo.hair}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionGlasses(targetSpecialInfo.data, targetSpecialInfo.data.sex)">
+                    <i class="icon ion-ios-glasses"></i> 眼镜
+                    <span class="item-note">{{curMeet.data.specialInfo.glasses}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionClothesType(targetSpecialInfo.data, targetSpecialInfo.data.sex)">
+                    <i class="icon ion-tshirt"></i> 衣服类型
+                    <span class="item-note">{{curMeet.data.specialInfo.clothesType}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionClothesColor(targetSpecialInfo.data, targetSpecialInfo.data.sex)">
+                    <i class="icon ion-android-color-palette"></i> 衣服颜色
+                    <span class="item-note">{{curMeet.data.specialInfo.clothesColor}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionClothesStyle(targetSpecialInfo.data, targetSpecialInfo.data.sex)">
+                    <i class="icon ion-ios-medical"></i> 衣服风格
+                    <span class="item-note">{{curMeet.data.specialInfo.clothesStyle}}</span>
+                </a>
+            </div>
+        </ion-list>
+        <!-- <div class="row">
+            <img class="pp-special-pic-sm" ng-src="{{curMeet.data.targetSpecialPic}}">
+            <div class="col col-center">{{curMeet.data.specialInfo.sex}}</div>
+        </div>
+        <div class="row">
+            <div class="col">{{curMeet.data.specialInfo.hair}}</div>
+            <div class="col">{{curMeet.data.specialInfo.clothesColor}}</div>
+        </div>
+        <div class="row">
+            <div class="col">{{curMeet.data.specialInfo.glasses}}</div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+            <div class="col">{{curMeet.data.specialInfo.clothesType}}</div>
+            <div class="col">{{curMeet.data.specialInfo.clothesStyle}}</div>
+        </div>
+        <h2>一场邂逅正在等待中</h1>
+<h2>发出时间: <span am-time-ago="curMeet.data.createdTime.$date"></span></h2> -->
+    </ion-content>
+</ion-modal-view>

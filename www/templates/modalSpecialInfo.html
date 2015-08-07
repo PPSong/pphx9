@@ -1,0 +1,42 @@
+<ion-modal-view>
+    <ion-content padding="true">
+        <img src="img/specialHeadLogo.png" />
+        <div class="padding">
+            <div class="row pp-no-padding">
+                <div class="col col-40 pp-no-padding">
+                    <img class="pp-special-pic-sm" ng-src="{{editingSpecialInfo.specialPic || 'img/uploadPhoto.png'}}" ng-click="popupBigPic()">
+                </div>
+                <div class="col col-60 col-center pp-no-padding">
+                    <button class="button button-positive button-block pp-shadow" ng-click="takePhoto()">
+                        拍摄
+                    </button>
+                </div>
+            </div>
+            <div class="list list-inset pp-black">
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionHair(editingSpecialInfo, usersRQ.result[0].profile.sex)">
+                    <i class="icon ion-ios-person"></i> 头发
+                    <span class="item-note">{{editingSpecialInfo.hair}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionGlasses(editingSpecialInfo)">
+                    <i class="icon ion-ios-glasses"></i> 眼镜
+                    <span class="item-note">{{editingSpecialInfo.glasses}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionClothesType(editingSpecialInfo, usersRQ.result[0].profile.sex)">
+                    <i class="icon ion-tshirt"></i> 衣服类型
+                    <span class="item-note">{{editingSpecialInfo.clothesType}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionClothesColor(editingSpecialInfo, usersRQ.result[0].profile.sex)">
+                    <i class="icon ion-android-color-palette"></i> 衣服颜色
+                    <span class="item-note">{{editingSpecialInfo.clothesColor}}</span>
+                </a>
+                <a class="item item-icon-left" href="#" ng-click="chooseOptionClothesStyle(editingSpecialInfo, usersRQ.result[0].profile.sex)">
+                    <i class="icon ion-ios-medical"></i> 衣服风格
+                    <span class="item-note">{{editingSpecialInfo.clothesStyle}}</span>
+                </a>
+            </div>
+            <div class="list list-inset">
+                <button class="button button-positive button-block pp-shadow" ng-click="saveSpecialInfo()">确定</button>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

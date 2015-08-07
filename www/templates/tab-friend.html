@@ -1,0 +1,18 @@
+<ion-view view-title="好友">
+    <ion-nav-buttons side="primary">
+        <button class="button button-light button-clear icon ion-ios-minus-outline" ng-click="toggleDeleteButton()">
+        </button>
+    </ion-nav-buttons>
+    <ion-content class="content-stable has-header">
+        <ion-list show-delete="showDelete">
+            <ion-item ng-repeat="item in friendsRQ.result" class="item item-avatar" href="#" ng-click="goToChat(item)">
+                <img ng-src="{{item.userId1 === usersRQ.result[0]._id ? item.friendLogo2 : item.friendLogo1}}">
+                <span class="badge badge-assertive" ng-hide="unreadCount(item.userId1 === usersRQ.result[0]._id ? item.userId2 : item.userId1) == 0">{{unreadCount(item.userId1 === usersRQ.result[0]._id ? item.userId2 : item.userId1)}}</span>
+                <h2 ng-if="item.username1 === usersRQ.result[0].username">{{item.nickname2}}</h2>
+                <h2 ng-if="item.username2 === usersRQ.result[0].username">{{item.nickname1}}</h2>
+                <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
+                </ion-delete-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

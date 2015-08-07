@@ -1,0 +1,21 @@
+<ion-view view-title="登录" hide-nav-bar="true">
+    <ion-content padding="true" class="has-header padding">
+        <div style="text-align:center">
+            <img class="pp-logo" src="img/ppLogo.png" />
+        </div>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" placeholder="用户名" ng-model="loginUser.username">
+            </label>
+        </div>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="password" placeholder="密码" ng-model="loginUser.password">
+                <i class="icon ion-ios-help placeholder-icon pp-forget-password"></i>
+            </label>
+        </div>
+        <div class="pp-spacer"></div>
+        <button class="button button-positive button-block pp-shadow" ng-disabled="!(loginUser.username && loginUser.password)" ng-click="login()">登录</button>
+        <a href="#/register" class="button button-light button-block pp-shadow">创建新用户</a>
+    </ion-content>
+</ion-view>

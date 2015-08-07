@@ -1,0 +1,32 @@
+<ion-view view-title="邀请">
+    <ion-nav-buttons side="primary">
+        <button class="button button-light button-clear icon ion-plus-round" ng-click="createMeet()">
+        </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="secondary">
+        <button class="button button-light button-clear icon ion-ios-body" ng-click="editSpecialInfo()">
+            <span class="header-badge badge badge-assertive" style="display:inline" ng-show="usersRQ.result[0].profile.needUpdateSpecialInfoCount > 0">{{usersRQ.result[0].profile.needUpdateSpecialInfoCount}}</span>
+        </button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+        <ion-list>
+            <div class="list card" ng-repeat="item in meetsRQ.result | orderBy: '-createdTime.$date'">
+                <a class="item item-thumbnail-left" href="#" ng-click="clickMeet(item)">
+                    <img ng-src="{{getImg(item)}}">
+                    <div class="row">
+                        <h2>{{getCustomStatus(item)}}</h2>
+                    </div>
+                    <div class="row">
+                        <p>{{item.createrUserId === usersRQ.result[0]._id ? '发出' : '收到'}}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col pp-black"><i class="icon ion-android-time"> <span am-time-ago="item.createdTime.$date" class="pp-black"></span></i></div>
+                        <div class="col"></div>
+                        <div class="col" ng-if="item.status == '待确认' && item.newMatchCount"><i class="icon assertive ion-heart"> {{item.newMatchCount}}</i></div>
+                        <div class="col" ng-if="item.status == '待回复'"><i class="icon pp-black ion-ios-filing"> {{item.replyLeft}}</i></div>
+                    </div>
+                </a>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,33 @@
+<ion-view view-title="注册">
+    <ion-content padding="true" class="has-header padding">
+        <div style="text-align:center">
+            <img class="pp-take-photo" src="img/takePhoto.png" />
+        </div>
+        <ion-list>
+            <div class="list list-inset">
+                <label class="item item-input">
+                    <input type="text" placeholder="用户名" ng-model="registerUser.username">
+                </label>
+            </div>
+            <div class="list list-inset">
+                <label class="item item-input">
+                    <input type="password" placeholder="密码" ng-model="registerUser.password">
+                </label>
+            </div>
+            <div class="list list-inset">
+                <label class="item item-input">
+                    <input type="text" placeholder="昵称" ng-model="registerUser.nickname">
+                </label>
+            </div>
+            <div class="row">
+                <button class="button col item" ng-class="{'button-balanced': registerUser.sex == '男'}" ng-click="chooseSex('男')">
+                    男
+                </button>
+                <button class="button col item" ng-class="{'button-balanced': registerUser.sex == '女'}" ng-click="chooseSex('女')">
+                    女
+                </button>
+            </div>
+        </ion-list>
+        <button class="button button-positive button-block pp-shadow" ng-click="register()" ng-disabled="!(registerUser.username && registerUser.password && registerUser.sex && registerUser.nickname)">确认</button>
+    </ion-content>
+</ion-view>

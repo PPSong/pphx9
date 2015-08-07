@@ -1,0 +1,14 @@
+<div class="list">
+  <label class="item item-input">
+    <i class="icon ion-search placeholder-icon"></i>
+    <input type="text" placeholder="关键字..." ng-model="keyword" ng-change="keywordSearch(keyword)">
+  </label>
+</div>
+
+<ion-radio ng-repeat="item in options" ng-model="data.optionVal" ng-value="item"
+ng-click="close()">{{item.name}}</ion-radio>
+<div class="list">
+    <label class="item item-input">
+        <input type="text" ng-model="data.customVal" placeholder="如没找到请在此输入...">
+    </label>
+</div>
