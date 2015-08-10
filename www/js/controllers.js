@@ -1,6 +1,7 @@
 angular.module('starter.controllers', ['angularMoment'])
     .controller('starterCtrl', function($scope, $ionicLoading, PPConsole) {
-        var serverUrl = "192.168.1.52:3000";
+        //var serverUrl = "hx9t.meteor.com";
+        var serverUrl = "192.168.1.54:3000";
         $scope.asteroid = new Asteroid(serverUrl);
         $scope.online = false;
 
@@ -76,14 +77,12 @@ angular.module('starter.controllers', ['angularMoment'])
         $scope.loginUser = {};
 
         $scope.login = function() {
-            $scope.asteroid.loginWithPassword($scope.loginUser.username, $scope.loginUser.password).then(
-                function(result) {
-                    PPConsole.debug(result);
-                    $state.go("tab.meet");
-                },
-                function(err) {
-                    PPConsole.err(err);
-                }
+            $scope.asteroid.loginWithPassword($scope.loginUser.username, $scope.loginUser.password).then(function(result) {
+                PPConsole.debug(result);
+                $state.go("tab.meet");
+            }, function(err) {
+                PPConsole.err(err);
+            }
             );
         };
     })
@@ -98,17 +97,14 @@ angular.module('starter.controllers', ['angularMoment'])
             $scope.asteroid.createUser($scope.registerUser.username, $scope.registerUser.password, {
                 sex: $scope.registerUser.sex,
                 nickname: $scope.registerUser.nickname
-            }).then(
-                function() {
-                    $state.go("tab.meet");
-                },
-                function(err) {
-                    PPConsole.err(err);
-                }
-            ).finally(
-                function() {
-                    $ionicLoading.hide();
-                }
+            }).then(function() {
+                $state.go("tab.meet");
+            }, function(err) {
+                PPConsole.err(err);
+            }
+            ).finally(function() {
+                $ionicLoading.hide();
+            }
             );
         }
 
@@ -236,13 +232,20 @@ angular.module('starter.controllers', ['angularMoment'])
             if (item.createrUserId === $scope.usersRQ.result[0]._id) {
                 if (item.status === "待确认") {
                     return "img/tbd.png";
-                } else {
+                } else if (item.status === "失败"){
+                    return item.targetSpecialPic || "img/tbd.png";
+                }
+                 else {
                     return item.targetSpecialPic;
                 }
             } else {
                 if (item.status === "待回复") {
                     return "img/needToReply.png";
-                } else {
+                } 
+                else if (item.status === "失败"){
+                    return "img/needToReply.png";
+                }
+                else {
                     return item.createrSpecialPic;
                 }
             }
@@ -259,6 +262,9 @@ angular.module('starter.controllers', ['angularMoment'])
                 }
             } else if (item.status == '成功') {
                 return "成功";
+            } else if (item.status == '失败')
+            {
+                return "失败";
             }
         };
 
@@ -267,31 +273,27 @@ angular.module('starter.controllers', ['angularMoment'])
                 template: '处理中...'
             });
             var tmpPromiseResult = $scope.asteroid.call("sendMeetCheck");
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    $scope.targetSpecialInfo.data = {};
-                    $scope.targetSpecialInfo.data.sex = ($scope.usersRQ.result[0].profile.sex === '男' ? '女' : '男');
-                    $scope.modalCreateMeet.show();
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $scope.targetSpecialInfo.data = {};
+                $scope.targetSpecialInfo.data.sex = ($scope.usersRQ.result[0].profile.sex === '男' ? '女' : '男');
+                $scope.modalCreateMeet.show();
 
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
         };
 
@@ -300,30 +302,26 @@ angular.module('starter.controllers', ['angularMoment'])
                 template: '处理中...'
             });
             var tmpPromiseResult = $scope.asteroid.call("createMeetSearchTarget", $scope.targetSpecialInfo.data);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    $scope.targets.data = r;
-                    $state.go('tab.meet.searchSpecialPic');
-                    $scope.modalCreateMeet.hide();
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $scope.targets.data = r;
+                $state.go('tab.meet.searchSpecialPic');
+                $scope.modalCreateMeet.hide();
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
         };
 
@@ -340,30 +338,26 @@ angular.module('starter.controllers', ['angularMoment'])
                         template: '处理中...'
                     });
                     var tmpPromiseResult = $scope.asteroid.call("createMeetSearchTarget", $scope.targetSpecialInfo.data);
-                    tmpPromiseResult.result.then(
-                        function(r) {
-                            PPConsole.debug("rr");
-                            PPConsole.debug(r);
-                            $scope.targets.data = r;
-                            $state.go('tab.meet.searchSpecialPicConfirm');
-                            $scope.modalCreateMeet.hide();
-                        },
-                        function(e) {
-                            PPConsole.debug("re");
-                            PPConsole.err(e);
-                        }
+                    tmpPromiseResult.result.then(function(r) {
+                        PPConsole.debug("rr");
+                        PPConsole.debug(r);
+                        $scope.targets.data = r;
+                        $state.go('tab.meet.searchSpecialPicConfirm');
+                        $scope.modalCreateMeet.hide();
+                    }, function(e) {
+                        PPConsole.debug("re");
+                        PPConsole.err(e);
+                    }
                     ).finally(function() {
                         $ionicLoading.hide();
                     });
-                    tmpPromiseResult.updated.then(
-                        function(r) {
-                            PPConsole.debug("ur");
-                            PPConsole.debug(r)
-                        },
-                        function(e) {
-                            PPConsole.debug("ue");
-                            PPConsole.err(e);
-                        }
+                    tmpPromiseResult.updated.then(function(r) {
+                        PPConsole.debug("ur");
+                        PPConsole.debug(r)
+                    }, function(e) {
+                        PPConsole.debug("ue");
+                        PPConsole.err(e);
+                    }
                     );
                 } else if (item.status === "待回复") {
                     $scope.modalWaitForReply.show();
@@ -380,7 +374,7 @@ angular.module('starter.controllers', ['angularMoment'])
 
         $scope.searchReplyTarget = function() {
             if (!(
-                    $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
+                $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
                 )) {
                 PPConsole.show('请把条件填写完整!');
                 return;
@@ -390,35 +384,31 @@ angular.module('starter.controllers', ['angularMoment'])
                 template: '努力搜索中...'
             });
             var tmpPromiseResult = $scope.asteroid.call("replyMeetSearchTarget", $scope.curMeet.data._id, $scope.targetSpecialInfo.data);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    if (r == '特征信息不匹配') {
-                        //特征信息不匹配
-                        PPConsole.show(r);
-                    } else {
-                        $scope.targets.data = r;
-                        $state.go('tab.meet.searchSpecialPicReply');
-                        $scope.modalReplyMeet.hide();
-                    }
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                if (r == '特征信息不匹配') {
+                    //特征信息不匹配
+                    PPConsole.show(r);
+                } else {
+                    $scope.targets.data = r;
+                    $state.go('tab.meet.searchSpecialPicReply');
+                    $scope.modalReplyMeet.hide();
                 }
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
 
         };
@@ -463,28 +453,24 @@ angular.module('starter.controllers', ['angularMoment'])
                 var long = position.coords.longitude;
 
                 var tmpPromiseResult = $scope.asteroid.call("saveSpecialInfoAndPosition", $scope.editingSpecialInfo, [long, lat]);
-                tmpPromiseResult.result.then(
-                    function(r) {
-                        PPConsole.debug("rr");
-                        PPConsole.debug(r)
-                        $scope.modalSpecialInfo.hide();
-                    },
-                    function(e) {
-                        PPConsole.debug("re");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.result.then(function(r) {
+                    PPConsole.debug("rr");
+                    PPConsole.debug(r)
+                    $scope.modalSpecialInfo.hide();
+                }, function(e) {
+                    PPConsole.debug("re");
+                    PPConsole.err(e);
+                }
                 ).finally(function() {
                     $ionicLoading.hide();
                 });
-                tmpPromiseResult.updated.then(
-                    function(r) {
-                        PPConsole.debug("ur");
-                        PPConsole.debug(r)
-                    },
-                    function(e) {
-                        PPConsole.debug("ue");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.updated.then(function(r) {
+                    PPConsole.debug("ur");
+                    PPConsole.debug(r)
+                }, function(e) {
+                    PPConsole.debug("ue");
+                    PPConsole.err(e);
+                }
                 );
             }, function(err) {
                 PPConsole.err(err);
@@ -516,7 +502,7 @@ angular.module('starter.controllers', ['angularMoment'])
                         }, function(err) {
                             PPConsole.err(err);
                         });
-                } catch (err) {
+                } catch ( err ) {
                     PPConsole.err(err);
                 }
             }
@@ -550,29 +536,25 @@ angular.module('starter.controllers', ['angularMoment'])
                 template: '处理中...'
             });
             var tmpPromiseResult = $scope.asteroid.call("createMeetChooseTarget", $scope.curTarget.data._id, $scope.targetSpecialInfo.data);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    $state.go("tab.meet");
-                    $scope.modalBigSpecialPic.hide();
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $state.go("tab.meet");
+                $scope.modalBigSpecialPic.hide();
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
         }
 
@@ -585,28 +567,24 @@ angular.module('starter.controllers', ['angularMoment'])
                 template: '处理中...'
             });
             var tmpPromiseResult = $scope.asteroid.call("createNeedConfirm", $scope.targetSpecialInfo.data);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    $state.go("tab.meet");
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $state.go("tab.meet");
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
         }
     })
@@ -638,29 +616,25 @@ angular.module('starter.controllers', ['angularMoment'])
                 template: '处理中...'
             });
             var tmpPromiseResult = $scope.asteroid.call("confirmMeetChooseTarget", $scope.curMeet.data._id, $scope.curTarget.data._id);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    $scope.modalBigSpecialPic.hide();
-                    $state.go("tab.meet");
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $scope.modalBigSpecialPic.hide();
+                $state.go("tab.meet");
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
         }
 
@@ -669,28 +643,24 @@ angular.module('starter.controllers', ['angularMoment'])
                 template: '处理中...'
             });
             var tmpPromiseResult = $scope.asteroid.call("clearNewMatchCount", $scope.curMeet.data._id);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    $state.go("tab.meet");
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $state.go("tab.meet");
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
 
         }
@@ -724,60 +694,52 @@ angular.module('starter.controllers', ['angularMoment'])
                     template: '处理中...'
                 });
                 var tmpPromiseResult = $scope.asteroid.call("selectFake");
-                tmpPromiseResult.result.then(
-                    function(r) {
-                        PPConsole.debug("rr");
-                        PPConsole.debug(r);
-                        PPConsole.show('没猜对,请仔细选择图片!');
-                        $scope.modalBigSpecialPic.hide();
-                        $state.go("tab.meet");
-                    },
-                    function(e) {
-                        PPConsole.debug("re");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.result.then(function(r) {
+                    PPConsole.debug("rr");
+                    PPConsole.debug(r);
+                    PPConsole.show('没猜对,请仔细选择图片!');
+                    $scope.modalBigSpecialPic.hide();
+                    $state.go("tab.meet");
+                }, function(e) {
+                    PPConsole.debug("re");
+                    PPConsole.err(e);
+                }
                 ).finally(function() {
                     $ionicLoading.hide();
                 });
-                tmpPromiseResult.updated.then(
-                    function(r) {
-                        PPConsole.debug("ur");
-                        PPConsole.debug(r)
-                    },
-                    function(e) {
-                        PPConsole.debug("ue");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.updated.then(function(r) {
+                    PPConsole.debug("ur");
+                    PPConsole.debug(r)
+                }, function(e) {
+                    PPConsole.debug("ue");
+                    PPConsole.err(e);
+                }
                 );
             } else {
                 $ionicLoading.show({
                     template: '处理中...'
                 });
                 var tmpPromiseResult = $scope.asteroid.call("replyMeetClickTarget", $scope.curMeet.data._id, $scope.curTarget.data.userId);
-                tmpPromiseResult.result.then(
-                    function(r) {
-                        PPConsole.debug("rr");
-                        PPConsole.debug(r);
-                        PPConsole.show('恭喜你!已加入好友列表,赶紧行动吧!');
-                        $scope.modalBigSpecialPic.hide();
-                        $state.go("tab.meet");
-                    },
-                    function(e) {
-                        PPConsole.debug("re");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.result.then(function(r) {
+                    PPConsole.debug("rr");
+                    PPConsole.debug(r);
+                    PPConsole.show('恭喜你!已加入好友列表,赶紧行动吧!');
+                    $scope.modalBigSpecialPic.hide();
+                    $state.go("tab.meet");
+                }, function(e) {
+                    PPConsole.debug("re");
+                    PPConsole.err(e);
+                }
                 ).finally(function() {
                     $ionicLoading.hide();
                 });
-                tmpPromiseResult.updated.then(
-                    function(r) {
-                        PPConsole.debug("ur");
-                        PPConsole.debug(r)
-                    },
-                    function(e) {
-                        PPConsole.debug("ue");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.updated.then(function(r) {
+                    PPConsole.debug("ur");
+                    PPConsole.debug(r)
+                }, function(e) {
+                    PPConsole.debug("ue");
+                    PPConsole.err(e);
+                }
                 );
             }
         }
@@ -795,28 +757,24 @@ angular.module('starter.controllers', ['angularMoment'])
 
         $scope.onItemDelete = function(item) {
             var tmpPromiseResult = $scope.asteroid.call("deleteFriend", item._id);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 $scope.showDelete = false;
                 $scope.$apply();
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
         }
 
@@ -865,58 +823,77 @@ angular.module('starter.controllers', ['angularMoment'])
             $scope.sending = true;
 
             var tmpPromiseResult = $scope.asteroid.call("sendMessage", $scope.inputMessage, $scope.friendUserId);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                    $scope.inputMessage = '';
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $scope.inputMessage = '';
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             ).finally(function() {
                 console.log('abc');
                 $scope.sending = false;
             });
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
         };
 
         $scope.myBack = function() {
             var tmpPromiseResult = $scope.asteroid.call("readMessage", $scope.friendUserId);
-            tmpPromiseResult.result.then(
-                function(r) {
-                    PPConsole.debug("rr");
-                    PPConsole.debug(r);
-                },
-                function(e) {
-                    PPConsole.debug("re");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
             )
-            tmpPromiseResult.updated.then(
-                function(r) {
-                    PPConsole.debug("ur");
-                    PPConsole.debug(r)
-                },
-                function(e) {
-                    PPConsole.debug("ue");
-                    PPConsole.err(e);
-                }
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
             );
             $state.go('tab.friend');
         }
     })
-    .controller('SettingCtrl', function($scope, $state, $ionicLoading, $cordovaGeolocation, $ionicHistory, $timeout) {
+    .controller('SettingCtrl', function($scope, $ionicLoading, PPConsole) {
+        $scope.friend = {username: ''};
+        $scope.addFriend = function () {
+            $ionicLoading.show({
+                template: '处理中...'
+            });
+            var tmpPromiseResult = $scope.asteroid.call("addFriend", $scope.friend.username);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $scope.friend.username = "";
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }
+            ).finally(function() {
+                $ionicLoading.hide();
+            });
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            }
+            );
+        }
+
         $scope.test = function() {
             console.log('abc');
             $ionicLoading.show({
@@ -933,27 +910,23 @@ angular.module('starter.controllers', ['angularMoment'])
                 var long = position.coords.longitude;
 
                 var tmpPromiseResult = $scope.asteroid.call("test", [long, lat]);
-                tmpPromiseResult.result.then(
-                    function(r) {
-                        PPConsole.debug("rr");
-                        PPConsole.debug(r)
-                    },
-                    function(e) {
-                        PPConsole.debug("re");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.result.then(function(r) {
+                    PPConsole.debug("rr");
+                    PPConsole.debug(r)
+                }, function(e) {
+                    PPConsole.debug("re");
+                    PPConsole.err(e);
+                }
                 ).finally(function() {
                     $ionicLoading.hide();
                 });
-                tmpPromiseResult.updated.then(
-                    function(r) {
-                        PPConsole.debug("ur");
-                        PPConsole.debug(r)
-                    },
-                    function(e) {
-                        PPConsole.debug("ue");
-                        PPConsole.err(e);
-                    }
+                tmpPromiseResult.updated.then(function(r) {
+                    PPConsole.debug("ur");
+                    PPConsole.debug(r)
+                }, function(e) {
+                    PPConsole.debug("ue");
+                    PPConsole.err(e);
+                }
                 );
             }, function(err) {
                 PPConsole.err(err);
@@ -962,18 +935,16 @@ angular.module('starter.controllers', ['angularMoment'])
         }
 
         $scope.logout = function() {
-            $scope.asteroid.logout().then(
-                function() {
-                    $state.go('login');
-                    // Clear all cache and history
-                    $timeout(function() {
-                        $ionicHistory.clearCache();
-                        $ionicHistory.clearHistory();
-                    }, 30)
-                },
-                function(err) {
-                    PPConsole.err(err);
-                }
+            $scope.asteroid.logout().then(function() {
+                $state.go('login');
+                // Clear all cache and history
+                $timeout(function() {
+                    $ionicHistory.clearCache();
+                    $ionicHistory.clearHistory();
+                }, 30)
+            }, function(err) {
+                PPConsole.err(err);
+            }
             );
         }
     });

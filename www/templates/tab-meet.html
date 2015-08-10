@@ -23,7 +23,10 @@
                         <div class="col pp-black"><i class="icon ion-android-time"> <span am-time-ago="item.createdTime.$date" class="pp-black"></span></i></div>
                         <div class="col"></div>
                         <div class="col" ng-if="item.status == '待确认' && item.newMatchCount"><i class="icon assertive ion-heart"> {{item.newMatchCount}}</i></div>
-                        <div class="col" ng-if="item.status == '待回复'"><i class="icon pp-black ion-ios-filing"> {{item.replyLeft}}</i></div>
+                        <div class="col" ng-if="item.status == '待回复' && item.targetUserId === usersRQ.result[0]._id"><i class="icon pp-black ion-ios-filing"> {{item.replyLeft}}</i></div>
+                    </div>
+                     <div class="row" ng-if="item.status == '待回复' || item.status == '待确认'">
+                         <div class="col pp-black"><i class="icon ion-ios-stopwatch-outline"> <span am-time-ago="item.createdTime.$date + 3600000" class="pp-black"></span></i></div>
                     </div>
                 </a>
             </div>
