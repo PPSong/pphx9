@@ -82,8 +82,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 $state.go("tab.meet");
             }, function(err) {
                 PPConsole.err(err);
-            }
-            );
+            });
         };
     })
     .controller('RegisterCtrl', function($scope, $state, $ionicLoading, OptionService, PPConsole) {
@@ -101,11 +100,9 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 $state.go("tab.meet");
             }, function(err) {
                 PPConsole.err(err);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
-            }
-            );
+            });
         }
 
         // $scope.chooseOptionSex = function() {
@@ -187,37 +184,37 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.chooseOptionHair = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['长(男)', '短(男)'], 'hair', '发型');
+                OptionService.initOption(object, ['竖起来(包括光头)', '躺下', '戴帽子'], 'hair', '发型');
             } else {
-                OptionService.initOption(object, ['长(女)', '短(女)'], 'hair', '发型');
+                OptionService.initOption(object, ['辫子/盘发', '短发(齐肩,不过肩)', '长发(过肩)', '戴帽子'], 'hair', '发型');
             }
         };
 
         $scope.chooseOptionGlasses = function(object) {
-            OptionService.initOption(object, ['带', '不带'], 'glasses', '眼镜');
+            OptionService.initOption(object, ['有', '无'], 'glasses', '眼镜');
         };
 
         $scope.chooseOptionClothesType = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['大衣(男)', '衬衫(男)'], 'clothesType', '衣服类型');
+                OptionService.initOption(object, ['风衣/大衣', '西装/夹克/套装', '运动外套/卫衣', 'T恤长袖', 'T恤短袖', '马甲/背心', '长袖衬衫', '短袖衬衫', '毛衣/羊毛绒/线衫/针织'], 'clothesType', '衣服类型');
             } else {
-                OptionService.initOption(object, ['大衣(女)', '衬衫(女)'], 'clothesType', '衣服类型');
+                OptionService.initOption(object, ['风衣/大衣', '西装/夹克/套装', '运动外套/卫衣', 'T恤长袖', 'T恤短袖', '马甲/背心', '长袖衬衫', '短袖衬衫', '毛衣/羊毛绒/线衫/针织', '连衣裙'], 'clothesType', '衣服类型');
             }
         };
 
         $scope.chooseOptionClothesColor = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['黑(男)', '白(男)'], 'clothesColor', '衣服颜色');
+                OptionService.initOption(object, ['红/紫/粉', '黄', '蓝/绿', '白', '黑', '灰', '无法分辨主要颜色(彩色,且难以判断主体颜色)'], 'clothesColor', '衣服颜色');
             } else {
-                OptionService.initOption(object, ['黑(女)', '白(女)'], 'clothesColor', '衣服颜色');
+                OptionService.initOption(object, ['红/紫/粉', '黄', '蓝/绿', '白', '黑', '灰', '无法分辨主要颜色(彩色,且难以判断主体颜色)'], 'clothesColor', '衣服颜色');
             }
         };
 
         $scope.chooseOptionClothesStyle = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['纯色(男)', '条纹(男)'], 'clothesStyle', '衣服花纹');
+                OptionService.initOption(object, ['纯色', '线条,格子,色块', '图案(抽象,卡通,画等有具体内容)'], 'clothesStyle', '衣服花纹');
             } else {
-                OptionService.initOption(object, ['纯色(女)', '条纹(女)'], 'clothesStyle', '衣服花纹');
+                OptionService.initOption(object, ['纯色', '线条,格子,色块', '图案(抽象,卡通,画等有具体内容)'], 'clothesStyle', '衣服花纹');
             }
         };
 
@@ -232,20 +229,17 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             if (item.createrUserId === $scope.usersRQ.result[0]._id) {
                 if (item.status === "待确认") {
                     return "img/tbd.png";
-                } else if (item.status === "失败"){
+                } else if (item.status === "失败") {
                     return item.targetSpecialPic || "img/tbd.png";
-                }
-                 else {
+                } else {
                     return item.targetSpecialPic;
                 }
             } else {
                 if (item.status === "待回复") {
                     return "img/needToReply.png";
-                } 
-                else if (item.status === "失败"){
+                } else if (item.status === "失败") {
                     return "img/needToReply.png";
-                }
-                else {
+                } else {
                     return item.createrSpecialPic;
                 }
             }
@@ -262,8 +256,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }
             } else if (item.status == '成功') {
                 return "成功";
-            } else if (item.status == '失败')
-            {
+            } else if (item.status == '失败') {
                 return "失败";
             }
         };
@@ -283,12 +276,10 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-                if (e.error == 'Error: [请更新特征信息!](500)')
-                {
+                if (e.error == 'Error: [请更新特征信息!](500)') {
                     $scope.editSpecialInfo();
                 }
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -297,8 +288,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         };
 
         $scope.searchCreateTarget = function() {
@@ -315,8 +305,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -325,8 +314,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         };
 
         $scope.closeWaitForReply = function() {
@@ -351,8 +339,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                     }, function(e) {
                         PPConsole.debug("re");
                         PPConsole.err(e);
-                    }
-                    ).finally(function() {
+                    }).finally(function() {
                         $ionicLoading.hide();
                     });
                     tmpPromiseResult.updated.then(function(r) {
@@ -361,8 +348,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                     }, function(e) {
                         PPConsole.debug("ue");
                         PPConsole.err(e);
-                    }
-                    );
+                    });
                 } else if (item.status === "待回复") {
                     $scope.modalWaitForReply.show();
                 }
@@ -378,7 +364,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.searchReplyTarget = function() {
             if (!(
-                $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
+                    $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
                 )) {
                 PPConsole.show('请把条件填写完整!');
                 return;
@@ -402,8 +388,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -412,8 +397,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
 
         };
 
@@ -464,8 +448,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("re");
                     PPConsole.err(e);
-                }
-                ).finally(function() {
+                }).finally(function() {
                     $ionicLoading.hide();
                 });
                 tmpPromiseResult.updated.then(function(r) {
@@ -474,8 +457,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("ue");
                     PPConsole.err(e);
-                }
-                );
+                });
             }, function(err) {
                 PPConsole.err(err);
                 $ionicLoading.hide();
@@ -506,7 +488,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                         }, function(err) {
                             PPConsole.err(err);
                         });
-                } catch ( err ) {
+                } catch (err) {
                     PPConsole.err(err);
                 }
             }
@@ -548,8 +530,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -558,8 +539,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         }
 
         $scope.goToMeetTab = function() {
@@ -578,8 +558,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -588,8 +567,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         }
     })
     .controller('SearchSpecialPicConfirmCtrl', function($scope, $ionicModal, $state, $ionicLoading, PPConsole) {
@@ -628,8 +606,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -638,8 +615,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         }
 
         $scope.noTarget = function() {
@@ -654,8 +630,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -664,8 +639,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
 
         }
     })
@@ -707,8 +681,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("re");
                     PPConsole.err(e);
-                }
-                ).finally(function() {
+                }).finally(function() {
                     $ionicLoading.hide();
                 });
                 tmpPromiseResult.updated.then(function(r) {
@@ -717,8 +690,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("ue");
                     PPConsole.err(e);
-                }
-                );
+                });
             } else {
                 $ionicLoading.show({
                     template: '处理中...'
@@ -733,8 +705,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("re");
                     PPConsole.err(e);
-                }
-                ).finally(function() {
+                }).finally(function() {
                     $ionicLoading.hide();
                 });
                 tmpPromiseResult.updated.then(function(r) {
@@ -743,8 +714,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("ue");
                     PPConsole.err(e);
-                }
-                );
+                });
             }
         }
 
@@ -767,8 +737,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $scope.showDelete = false;
                 $scope.$apply();
             });
@@ -778,8 +747,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         }
 
         $scope.unreadCount = function(friendUserId) {
@@ -834,8 +802,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 console.log('abc');
                 $scope.sending = false;
             });
@@ -845,8 +812,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         };
 
         $scope.myBack = function() {
@@ -857,22 +823,22 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            )
+            })
             tmpPromiseResult.updated.then(function(r) {
                 PPConsole.debug("ur");
                 PPConsole.debug(r)
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
             $state.go('tab.friend');
         }
     })
     .controller('SettingCtrl', function($scope, $state, $ionicLoading, PPConsole) {
-        $scope.friend = {username: ''};
-        $scope.addFriend = function () {
+        $scope.friend = {
+            username: ''
+        };
+        $scope.addFriend = function() {
             $ionicLoading.show({
                 template: '处理中...'
             });
@@ -884,8 +850,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
-            }
-            ).finally(function() {
+            }).finally(function() {
                 $ionicLoading.hide();
             });
             tmpPromiseResult.updated.then(function(r) {
@@ -894,8 +859,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             }, function(e) {
                 PPConsole.debug("ue");
                 PPConsole.err(e);
-            }
-            );
+            });
         }
 
         $scope.test = function() {
@@ -920,8 +884,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("re");
                     PPConsole.err(e);
-                }
-                ).finally(function() {
+                }).finally(function() {
                     $ionicLoading.hide();
                 });
                 tmpPromiseResult.updated.then(function(r) {
@@ -930,8 +893,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, function(e) {
                     PPConsole.debug("ue");
                     PPConsole.err(e);
-                }
-                );
+                });
             }, function(err) {
                 PPConsole.err(err);
                 $ionicLoading.hide();
@@ -948,7 +910,6 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 }, 30)
             }, function(err) {
                 PPConsole.err(err);
-            }
-            );
+            });
         }
     });
