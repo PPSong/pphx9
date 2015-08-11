@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['angularMoment'])
+angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('starterCtrl', function($scope, $ionicLoading, PPConsole) {
         //var serverUrl = "hx9t.meteor.com";
         var serverUrl = "192.168.1.54:3000";
@@ -283,6 +283,10 @@ angular.module('starter.controllers', ['angularMoment'])
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);
+                if (e.error == 'Error: [请更新特征信息!](500)')
+                {
+                    $scope.editSpecialInfo();
+                }
             }
             ).finally(function() {
                 $ionicLoading.hide();
@@ -866,7 +870,7 @@ angular.module('starter.controllers', ['angularMoment'])
             $state.go('tab.friend');
         }
     })
-    .controller('SettingCtrl', function($scope, $ionicLoading, PPConsole) {
+    .controller('SettingCtrl', function($scope, $state, $ionicLoading, PPConsole) {
         $scope.friend = {username: ''};
         $scope.addFriend = function () {
             $ionicLoading.show({
