@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('starterCtrl', function($scope, $ionicLoading, PPConsole) {
-        //var serverUrl = "hx9t.meteor.com";
-        var serverUrl = "192.168.1.54:3000";
+        var serverUrl = "hx9t.meteor.com";
+        //var serverUrl = "192.168.1.9:3000";
         $scope.asteroid = new Asteroid(serverUrl);
         $scope.online = false;
 
@@ -178,15 +178,19 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             OptionService.initOptionWithInput(object, 'place', '场所', $scope.usersRQ.result[0].profile.lastLocation);
         };
 
-        $scope.chooseOptionSex = function(object) {
+        $scope.chooseOptionSex = function(object, needReset) {
             OptionService.initOption(object, ['男', '女'], 'sex', '性别');
+            object.hair = null;
+            object.clothesType = null;
+            object.clothesColor = null;
+            object.clothesStyle = null;
         };
 
         $scope.chooseOptionHair = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['竖起来(包括光头)', '躺下', '戴帽子'], 'hair', '发型');
+                OptionService.initOption(object, ['(男)竖起来(包括光头)', '(男)躺下', '(男)戴帽子'], 'hair', '发型');
             } else {
-                OptionService.initOption(object, ['辫子/盘发', '短发(齐肩,不过肩)', '长发(过肩)', '戴帽子'], 'hair', '发型');
+                OptionService.initOption(object, ['(女)辫子/盘发', '(女)短发(齐肩,不过肩)', '(女)长发(过肩)', '(女)戴帽子'], 'hair', '发型');
             }
         };
 
@@ -196,25 +200,25 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.chooseOptionClothesType = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['风衣/大衣', '西装/夹克/套装', '运动外套/卫衣', 'T恤长袖', 'T恤短袖', '马甲/背心', '长袖衬衫', '短袖衬衫', '毛衣/羊毛绒/线衫/针织'], 'clothesType', '衣服类型');
+                OptionService.initOption(object, ['(男)风衣/大衣', '(男)西装/夹克/套装', '(男)运动外套/卫衣', '(男)T恤长袖', '(男)T恤短袖', '(男)马甲/背心', '(男)长袖衬衫', '(男)短袖衬衫', '(男)毛衣/羊毛绒/线衫/针织'], 'clothesType', '衣服类型');
             } else {
-                OptionService.initOption(object, ['风衣/大衣', '西装/夹克/套装', '运动外套/卫衣', 'T恤长袖', 'T恤短袖', '马甲/背心', '长袖衬衫', '短袖衬衫', '毛衣/羊毛绒/线衫/针织', '连衣裙'], 'clothesType', '衣服类型');
+                OptionService.initOption(object, ['(女)风衣/大衣', '(女)西装/夹克/套装', '(女)运动外套/卫衣', '(女)T恤长袖', '(女)T恤短袖', '(女)马甲/背心', '(女)长袖衬衫', '(女)短袖衬衫', '(女)毛衣/羊毛绒/线衫/针织', '(女)连体裙'], 'clothesType', '衣服类型');
             }
         };
 
         $scope.chooseOptionClothesColor = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['红/紫/粉', '黄', '蓝/绿', '白', '黑', '灰', '无法分辨主要颜色(彩色,且难以判断主体颜色)'], 'clothesColor', '衣服颜色');
+                OptionService.initOption(object, ['(男)红/紫/粉', '(男)黄', '(男)蓝/绿', '(男)白', '(男)黑', '(男)灰', '(男)彩色,且难以判断主体颜色'], 'clothesColor', '衣服颜色');
             } else {
-                OptionService.initOption(object, ['红/紫/粉', '黄', '蓝/绿', '白', '黑', '灰', '无法分辨主要颜色(彩色,且难以判断主体颜色)'], 'clothesColor', '衣服颜色');
+                OptionService.initOption(object, ['(女)红/紫/粉', '(女)黄', '(女)蓝/绿', '(女)白', '(女)黑', '(女)灰', '(女)彩色,且难以判断主体颜色'], 'clothesColor', '衣服颜色');
             }
         };
 
         $scope.chooseOptionClothesStyle = function(object, sex) {
             if (sex == "男") {
-                OptionService.initOption(object, ['纯色', '线条,格子,色块', '图案(抽象,卡通,画等有具体内容)'], 'clothesStyle', '衣服花纹');
+                OptionService.initOption(object, ['(男)纯色', '(男)线条,格子,色块', '(男)图案(抽象,卡通,画等有具体内容)'], 'clothesStyle', '衣服花纹');
             } else {
-                OptionService.initOption(object, ['纯色', '线条,格子,色块', '图案(抽象,卡通,画等有具体内容)'], 'clothesStyle', '衣服花纹');
+                OptionService.initOption(object, ['(女)纯色', '(女)线条,格子,色块', '(女)图案(抽象,卡通,画等有具体内容)'], 'clothesStyle', '衣服花纹');
             }
         };
 
@@ -364,7 +368,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.searchReplyTarget = function() {
             if (!(
-                    $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
+                $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
                 )) {
                 PPConsole.show('请把条件填写完整!');
                 return;
@@ -488,7 +492,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                         }, function(err) {
                             PPConsole.err(err);
                         });
-                } catch (err) {
+                } catch ( err ) {
                     PPConsole.err(err);
                 }
             }
@@ -834,7 +838,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $state.go('tab.friend');
         }
     })
-    .controller('SettingCtrl', function($scope, $state, $ionicLoading, PPConsole) {
+    .controller('SettingCtrl', function($scope, $state, $ionicLoading, $cordovaGeolocation, PPConsole) {
         $scope.friend = {
             username: ''
         };
