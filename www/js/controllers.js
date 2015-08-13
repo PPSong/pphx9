@@ -80,6 +80,8 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $scope.asteroid.loginWithPassword($scope.loginUser.username, $scope.loginUser.password).then(function(result) {
                 PPConsole.debug(result);
                 $state.go("tab.meet");
+                $scope.loginUser.username = null;
+                $scope.loginUser.password = null;
             }, function(err) {
                 PPConsole.err(err);
             });
@@ -98,6 +100,10 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 nickname: $scope.registerUser.nickname
             }).then(function() {
                 $state.go("tab.meet");
+                $scope.registerUser.username = null;
+                $scope.registerUser.password = null;
+                $scope.registerUser.sex = null;
+                $scope.registerUser.nickname = null;
             }, function(err) {
                 PPConsole.err(err);
             }).finally(function() {
@@ -114,8 +120,12 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
     })
     .controller('TabsCtrl', function($scope, PPConsole) {
         $scope.messages = $scope.asteroid.getCollection("messages");
-
         $scope.allMessagesRQ = $scope.messages.reactiveQuery({});
+        $scope.unreadMessagesRQ = $scope.messages.reactiveQuery({
+            toUserId: $scope.usersRQ.result[0]._id,
+            unread: true
+        });
+
         $scope.allMessagesRQ.on("change", function() {
             PPConsole.debug("allMessagesRQ change");
             $scope.unreadMessagesRQ = $scope.messages.reactiveQuery({
@@ -368,7 +378,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.searchReplyTarget = function() {
             if (!(
-                $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
+                    $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
                 )) {
                 PPConsole.show('请把条件填写完整!');
                 return;
@@ -492,7 +502,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                         }, function(err) {
                             PPConsole.err(err);
                         });
-                } catch ( err ) {
+                } catch (err) {
                     PPConsole.err(err);
                 }
             }
