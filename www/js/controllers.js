@@ -279,30 +279,73 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $ionicLoading.show({
                 template: '处理中...'
             });
-            var tmpPromiseResult = $scope.asteroid.call("sendMeetCheck");
-            tmpPromiseResult.result.then(function(r) {
-                PPConsole.debug("rr");
-                PPConsole.debug(r);
-                $scope.targetSpecialInfo.data = {};
-                $scope.targetSpecialInfo.data.sex = ($scope.usersRQ.result[0].profile.sex === '男' ? '女' : '男');
-                $scope.modalCreateMeet.show();
 
-            }, function(e) {
-                PPConsole.debug("re");
-                PPConsole.err(e);
-                if (e.error == 'Error: [请更新特征信息!](500)') {
-                    $scope.editSpecialInfo();
-                }
-            }).finally(function() {
+            //上传当前地理位置和specialInfo
+            var posOptions = {
+                timeout: 10000,
+                enableHighAccuracy: true
+            };
+
+            $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+                var lat = position.coords.latitude;
+                var long = position.coords.longitude;
+
+                var tmpPromiseResult = $scope.asteroid.call("sendMeetCheck", [long, lat]);
+                tmpPromiseResult.result.then(function(r) {
+                    PPConsole.debug("rr");
+                    PPConsole.debug(r);
+                    $scope.targetSpecialInfo.data = {};
+                    $scope.targetSpecialInfo.data.sex = ($scope.usersRQ.result[0].profile.sex === '男' ? '女' : '男');
+                    $scope.modalCreateMeet.show();
+                }, function(e) {
+                    PPConsole.debug("re");
+                    PPConsole.err(e);
+                    if (e.error == 'Error: [请更新特征信息!](500)') {
+                        $scope.editSpecialInfo();
+                    }
+                }).finally(function() {
+                    $ionicLoading.hide();
+                });
+                tmpPromiseResult.updated.then(function(r) {
+                    PPConsole.debug("ur");
+                    PPConsole.debug(r)
+                }, function(e) {
+                    PPConsole.debug("ue");
+                    PPConsole.err(e);
+                });
+            }, function(err) {
+                PPConsole.err(err);
                 $ionicLoading.hide();
             });
-            tmpPromiseResult.updated.then(function(r) {
-                PPConsole.debug("ur");
-                PPConsole.debug(r)
-            }, function(e) {
-                PPConsole.debug("ue");
-                PPConsole.err(e);
-            });
+
+
+            // $ionicLoading.show({
+            //     template: '处理中...'
+            // });
+            // var tmpPromiseResult = $scope.asteroid.call("sendMeetCheck");
+            // tmpPromiseResult.result.then(function(r) {
+            //     PPConsole.debug("rr");
+            //     PPConsole.debug(r);
+            //     $scope.targetSpecialInfo.data = {};
+            //     $scope.targetSpecialInfo.data.sex = ($scope.usersRQ.result[0].profile.sex === '男' ? '女' : '男');
+            //     $scope.modalCreateMeet.show();
+
+            // }, function(e) {
+            //     PPConsole.debug("re");
+            //     PPConsole.err(e);
+            //     if (e.error == 'Error: [请更新特征信息!](500)') {
+            //         $scope.editSpecialInfo();
+            //     }
+            // }).finally(function() {
+            //     $ionicLoading.hide();
+            // });
+            // tmpPromiseResult.updated.then(function(r) {
+            //     PPConsole.debug("ur");
+            //     PPConsole.debug(r)
+            // }, function(e) {
+            //     PPConsole.debug("ue");
+            //     PPConsole.err(e);
+            // });
         };
 
         $scope.searchCreateTarget = function() {
