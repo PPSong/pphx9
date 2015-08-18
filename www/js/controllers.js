@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('starterCtrl', function($scope, $ionicLoading, PPConsole) {
-        var serverUrl = "hx9t.meteor.com";
-        //var serverUrl = "192.168.1.9:3000";
+        //var serverUrl = "hx9t.meteor.com";
+        var serverUrl = "192.168.1.9:3000";
         $scope.asteroid = new Asteroid(serverUrl);
         $scope.online = false;
 
@@ -330,22 +330,22 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             //     $scope.targetSpecialInfo.data.sex = ($scope.usersRQ.result[0].profile.sex === '男' ? '女' : '男');
             //     $scope.modalCreateMeet.show();
 
-            // }, function(e) {
-            //     PPConsole.debug("re");
-            //     PPConsole.err(e);
-            //     if (e.error == 'Error: [请更新特征信息!](500)') {
-            //         $scope.editSpecialInfo();
-            //     }
-            // }).finally(function() {
-            //     $ionicLoading.hide();
-            // });
-            // tmpPromiseResult.updated.then(function(r) {
-            //     PPConsole.debug("ur");
-            //     PPConsole.debug(r)
-            // }, function(e) {
-            //     PPConsole.debug("ue");
-            //     PPConsole.err(e);
-            // });
+        // }, function(e) {
+        //     PPConsole.debug("re");
+        //     PPConsole.err(e);
+        //     if (e.error == 'Error: [请更新特征信息!](500)') {
+        //         $scope.editSpecialInfo();
+        //     }
+        // }).finally(function() {
+        //     $ionicLoading.hide();
+        // });
+        // tmpPromiseResult.updated.then(function(r) {
+        //     PPConsole.debug("ur");
+        //     PPConsole.debug(r)
+        // }, function(e) {
+        //     PPConsole.debug("ue");
+        //     PPConsole.err(e);
+        // });
         };
 
         $scope.searchCreateTarget = function() {
@@ -421,7 +421,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.searchReplyTarget = function() {
             if (!(
-                    $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
+                $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
                 )) {
                 PPConsole.show('请把条件填写完整!');
                 return;
@@ -545,7 +545,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                         }, function(err) {
                             PPConsole.err(err);
                         });
-                } catch (err) {
+                } catch ( err ) {
                     PPConsole.err(err);
                 }
             }
