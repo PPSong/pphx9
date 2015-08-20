@@ -49,7 +49,11 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         });
 
         $scope.asteroid.subscribe("meets");
+        //$scope.asteroid.subscribe("otherActivities");
+        //$scope.asteroid.subscribe("myActivities");
         $scope.asteroid.subscribe("messages");
+        $scope.asteroid.subscribe("unreadMessageCount");
+        $scope.asteroid.subscribe("unreadCount");
         $scope.asteroid.subscribe("friends");
 
         $scope.users = $scope.asteroid.getCollection("users");
@@ -66,12 +70,44 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             PPConsole.debug("meets change");
         });
 
+        $scope.unreadMessageCounts = $scope.asteroid.getCollection("unreadMessageCounts");
+        $scope.unreadMessageCountsRQ = $scope.unreadMessageCounts.reactiveQuery({});
+        $scope.unreadMessageCountsRQ.on("change", function() {
+            $scope.$apply();
+            console.log($scope.unreadMessageCountsRQ.result);
+            PPConsole.debug("unreadMessageCounts change");
+        });
+
         $scope.friends = $scope.asteroid.getCollection("friends");
         $scope.friendsRQ = $scope.friends.reactiveQuery({});
         $scope.friendsRQ.on("change", function() {
             $scope.$apply();
             PPConsole.debug("message change");
         });
+
+        // $scope.activities = $scope.asteroid.getCollection("activities");
+        // $scope.otherActivitiesRQ = $scope.activities.reactiveQuery(function(item) {
+        //     if ($scope.usersRQ.result[0]) {
+        //         if (item.persons) {
+        //             return item.persons.indexOf($scope.usersRQ.result[0]._id) < 0;
+        //         } else {
+        //             return true;
+        //         }
+        //     } else {
+        //         return false;
+        //     }
+        // });
+        // $scope.otherActivitiesRQ.on("change", function() {
+        //     $scope.$apply();
+        //     PPConsole.debug("otherActivities change");
+        // });
+        // $scope.myActivitiesRQ = $scope.activities.reactiveQuery({
+        //     persons: $scope.usersRQ.result[0] ? $scope.usersRQ.result[0]._id : 'empty',
+        // });
+        // $scope.myActivitiesRQ.on("change", function() {
+        //     $scope.$apply();
+        //     PPConsole.debug("myActivities change");
+        // });
     })
     .controller('LoginCtrl', function($scope, $state, PPConsole) {
         $scope.loginUser = {};
@@ -121,17 +157,9 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('TabsCtrl', function($scope, PPConsole) {
         $scope.messages = $scope.asteroid.getCollection("messages");
         $scope.allMessagesRQ = $scope.messages.reactiveQuery({});
-        $scope.unreadMessagesRQ = $scope.messages.reactiveQuery({
-            toUserId: $scope.usersRQ.result[0]._id,
-            unread: true
-        });
 
         $scope.allMessagesRQ.on("change", function() {
             PPConsole.debug("allMessagesRQ change");
-            $scope.unreadMessagesRQ = $scope.messages.reactiveQuery({
-                toUserId: $scope.usersRQ.result[0]._id,
-                unread: true
-            });
             $scope.$apply();
         });
 
@@ -330,22 +358,22 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             //     $scope.targetSpecialInfo.data.sex = ($scope.usersRQ.result[0].profile.sex === '男' ? '女' : '男');
             //     $scope.modalCreateMeet.show();
 
-        // }, function(e) {
-        //     PPConsole.debug("re");
-        //     PPConsole.err(e);
-        //     if (e.error == 'Error: [请更新特征信息!](500)') {
-        //         $scope.editSpecialInfo();
-        //     }
-        // }).finally(function() {
-        //     $ionicLoading.hide();
-        // });
-        // tmpPromiseResult.updated.then(function(r) {
-        //     PPConsole.debug("ur");
-        //     PPConsole.debug(r)
-        // }, function(e) {
-        //     PPConsole.debug("ue");
-        //     PPConsole.err(e);
-        // });
+            // }, function(e) {
+            //     PPConsole.debug("re");
+            //     PPConsole.err(e);
+            //     if (e.error == 'Error: [请更新特征信息!](500)') {
+            //         $scope.editSpecialInfo();
+            //     }
+            // }).finally(function() {
+            //     $ionicLoading.hide();
+            // });
+            // tmpPromiseResult.updated.then(function(r) {
+            //     PPConsole.debug("ur");
+            //     PPConsole.debug(r)
+            // }, function(e) {
+            //     PPConsole.debug("ue");
+            //     PPConsole.err(e);
+            // });
         };
 
         $scope.searchCreateTarget = function() {
@@ -421,7 +449,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.searchReplyTarget = function() {
             if (!(
-                $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
+                    $scope.targetSpecialInfo.data.sex && $scope.targetSpecialInfo.data.clothesColor && $scope.targetSpecialInfo.data.clothesStyle && $scope.targetSpecialInfo.data.clothesType && $scope.targetSpecialInfo.data.glasses && $scope.targetSpecialInfo.data.hair
                 )) {
                 PPConsole.show('请把条件填写完整!');
                 return;
@@ -545,7 +573,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                         }, function(err) {
                             PPConsole.err(err);
                         });
-                } catch ( err ) {
+                } catch (err) {
                     PPConsole.err(err);
                 }
             }
@@ -779,6 +807,55 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $state.go("tab.meet");
         }
     })
+    .controller('ActivityCtrl', function($scope, $state, $ionicModal, $ionicLoading, PPConsole) {
+        $scope.curFilter = '活动广场';
+
+        $ionicModal.fromTemplateUrl('templates/modalJoinActivity.html', {
+            scope: $scope,
+            animation: 'slide-in-up',
+            backdropClickToClose: false
+        }).then(function(modal) {
+            $scope.modalJoinActivity = modal;
+        });
+
+        $scope.chooseFilter = function(filterString) {
+            $scope.curFilter = filterString;
+        }
+
+        $scope.joinActivity = function(item) {
+            $scope.curActivity = item;
+            $scope.modalJoinActivity.show();
+        }
+
+        $scope.cancelJoinActivity = function() {
+            $scope.modalJoinActivity.hide();
+        }
+
+        $scope.chooseMark = function(mark) {
+            $ionicLoading.show({
+                template: '处理中...'
+            });
+            var tmpPromiseResult = $scope.asteroid.call("chooseMark", $scope.curActivity._id, mark);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                PPConsole.show('恭喜你!已加入活动!');
+                $scope.modalJoinActivity.hide();
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }).finally(function() {
+                $ionicLoading.hide();
+            });
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            });
+        }
+    })
     .controller('FriendCtrl', function($scope, $state) {
         $scope.showDelete = false;
 
@@ -808,10 +885,13 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         }
 
         $scope.unreadCount = function(friendUserId) {
-            return $scope.messages.reactiveQuery({
-                fromUserId: friendUserId,
-                unread: true
-            }).result.length;
+            var tmpArray = $scope.unreadMessageCountsRQ.result;
+            for (var i = 0; i < tmpArray.length; i++) {
+                if (tmpArray[i]._id == friendUserId) {
+                    return tmpArray[i].count;
+                }
+            }
+            return 0;
         };
 
         $scope.goToChat = function(item) {

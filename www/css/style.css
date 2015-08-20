@@ -1,4 +1,5 @@
 /*overwrite default*/
+
 .col {
     padding: 0px;
 }
@@ -102,10 +103,36 @@
     font-size: 12px;
 }
 
+
 /*end overwrite default*/
 
 
 /* Empty. Add your own CSS if you like */
+.pp-center .scroll{
+    text-align: center;
+}
+
+.pp-mark{
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    background-color: red;
+    margin: 1px;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.16), 0 4px 20px 0 rgba(0, 0, 0, 0.12);
+}
+
+.pp-white-font{
+    color: white;
+}
+
+.pp-image-drop-back {
+    background-image: url('../img/activityImage.png');
+    display: block;
+    height: 170px;
+    background-color: rgba(0,0,0,.4);
+    background-blend-mode: multiply;
+    color: white;
+}
 
 .pp-card {
     margin-bottom: 0px !important;
@@ -145,6 +172,10 @@
 
 .pp-space {
     height: 40px;
+}
+
+.pp-space-big {
+    height: 70px;
 }
 
 .pp-shadow {

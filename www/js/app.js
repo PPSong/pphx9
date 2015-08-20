@@ -116,6 +116,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             }
         })
 
+        .state('tab.activity', {
+            url: '/activity',
+            views: {
+                'tab-activity': {
+                    templateUrl: 'templates/tab-activity.html',
+                    controller: 'ActivityCtrl'
+                }
+            }
+        })
+
         .state('tab.friend', {
             url: '/friend',
             views: {

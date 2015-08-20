@@ -11,12 +11,12 @@ angular.module('starter.services', ['ngCordova'])
 
             },
             debug: function(obj) {
-                // try {
-                //     $cordovaToast.show("[PPDebug:]" + obj.message || obj || "err occur!", 'long', 'bottom');
-                // } catch (e) {
-                //     console.log("[PPDebug:]");
-                //     console.log(obj);
-                // }
+                try {
+                    $cordovaToast.show("[PPDebug:]" + obj.message || obj || "err occur!", 'long', 'bottom');
+                } catch (e) {
+                    console.log("[PPDebug:]");
+                    console.log(obj);
+                }
             },
             show: function(obj) {
                 try {
