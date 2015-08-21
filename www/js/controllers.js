@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('starterCtrl', function($scope, $ionicLoading, PPConsole) {
         //var serverUrl = "hx9t.meteor.com";
-        var serverUrl = "192.168.1.9:3000";
+        var serverUrl = "192.168.1.54:3000";
         $scope.asteroid = new Asteroid(serverUrl);
         $scope.online = false;
 
@@ -54,7 +54,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         $scope.asteroid.subscribe("myActivities");
         $scope.asteroid.subscribe("messages");
         $scope.asteroid.subscribe("unreadMessageCount");
-        $scope.asteroid.subscribe("unreadGroupChatMessageCount");
+        $scope.asteroid.subscribe("activityPersons");
         $scope.asteroid.subscribe("friends");
 
         $scope.users = $scope.asteroid.getCollection("users");
@@ -78,11 +78,11 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             PPConsole.debug("unreadMessageCounts change");
         });
 
-        $scope.unreadGroupChatMessageCounts = $scope.asteroid.getCollection("unreadGroupChatMessageCounts");
-        $scope.unreadGroupChatMessageCountsRQ = $scope.unreadGroupChatMessageCounts.reactiveQuery({});
-        $scope.unreadGroupChatMessageCountsRQ.on("change", function() {
+        $scope.activityPersons = $scope.asteroid.getCollection("activityPersons");
+        $scope.activityPersonsRQ = $scope.activityPersons.reactiveQuery({});
+        $scope.activityPersonsRQ.on("change", function() {
             $scope.$apply();
-            PPConsole.debug("unreadGroupChatMessageCounts change");
+            PPConsole.debug("activityPersons change");
         });
 
         $scope.friends = $scope.asteroid.getCollection("friends");
@@ -169,9 +169,25 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             data: null
         }
 
-        $scope.curActivity = {
-            data: null
-        }
+        $scope.unreadGroupChatCount = function(key) {
+            var array = $scope.activityPersonsRQ.result;
+            for (var i = 0; i < array.length; i++) {
+                if (array[i].activityId == key) {
+                    return array[i].unreadCount;
+                }
+            }
+            return 0;
+        };
+
+        $scope.unreadGroupChatTotalCount = function() {
+            var array = $scope.activityPersonsRQ.result;
+            var result = 0;
+            for (var i = 0; i < array.length; i++) {
+                result += array[i].unreadCount;
+            }
+            return result;
+        };
+
 
         $scope.unreadCount = function(array, key) {
             for (var i = 0; i < array.length; i++) {
@@ -832,10 +848,9 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $scope.modalJoinActivity.show();
         }
 
-        $scope.enterActivity = function(item) {
-            $scope.curActivity.data = item;
+        $scope.enterActivity = function(activityId) {
             $state.go('tab.activity.chat', {
-                activityId: item._id
+                activityId: activityId
             });
         }
 
@@ -973,7 +988,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $state.go('tab.friend');
         }
     })
-    .controller('ActivityChatCtrl', function($scope, $state, $stateParams, $ionicScrollDelegate, $timeout, PPConsole) {
+    .controller('ActivityChatCtrl', function($scope, $state, $stateParams, $ionicScrollDelegate, $ionicModal, $timeout, PPConsole) {
         $scope.activityId = $stateParams.activityId;
 
         $scope.asteroid.subscribe("groupChatMessages", $scope.activityId);
@@ -985,9 +1000,34 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             PPConsole.debug("groupChatMessages change");
         });
 
+        $scope.curActivityRQ = $scope.activities.reactiveQuery({
+            _id: $scope.activityId
+        });
+        $scope.curActivityRQ.on("change", function() {
+            $scope.$apply();
+            PPConsole.debug("curActivityRQ change");
+        });
+
         $timeout(function() {
             $ionicScrollDelegate.scrollBottom(true);
         }, 300);
+
+
+        $ionicModal.fromTemplateUrl('templates/modalActivityLike.html', {
+            scope: $scope,
+            animation: 'slide-in-up',
+            backdropClickToClose: false
+        }).then(function(modal) {
+            $scope.modalActivityLike = modal;
+        });
+        
+        $scope.editLike = function() {
+            $scope.modalActivityLike.show();
+        };
+
+        $scope.closeLike = function() {
+            $scope.modalActivityLike.hide();
+        };
 
         $scope.sendMessage = function() {
             //防止在消息发送过程中重复发送或发送空消息
@@ -1018,7 +1058,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         };
 
         $scope.myBack = function() {
-            var tmpPromiseResult = $scope.asteroid.call("updateLastChatTime", $scope.activityId);
+            var tmpPromiseResult = $scope.asteroid.call("readGroupMessage", $scope.activityId);
             tmpPromiseResult.result.then(function(r) {
                 PPConsole.debug("rr");
                 PPConsole.debug(r);

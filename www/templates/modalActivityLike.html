@@ -1,0 +1,15 @@
+<ion-modal-view view-title="setting">
+    <ion-header-bar class="bar-stable">
+        <div class="buttons">
+            <button class="button button-light button-clear icon ion-chevron-left" ng-click="closeLike()">
+            </button>
+        </div>
+    </ion-header-bar>
+    <ion-content padding="true" class="has-header padding pp-special-pic-head">
+        <ion-list>
+            <ion-item ng-repeat="item in curActivityRQ.result[0].persons" class="item item-avatar" href="#" ng-click="goToChat(item)">
+               {{item}}
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-modal-view>
