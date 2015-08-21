@@ -5,11 +5,15 @@
             </button>
         </div>
     </ion-header-bar>
-    <ion-content padding="true" class="has-header padding pp-special-pic-head">
-        <ion-list>
-            <ion-item ng-repeat="item in curActivityRQ.result[0].persons" class="item item-avatar" href="#" ng-click="goToChat(item)">
-               {{item}}
-            </ion-item>
-        </ion-list>
+    <ion-content padding="true" class="has-header padding">
+        <ion-item ng-repeat="item in curActivityRQ.result[0].persons | filter: {userId: '!' + usersRQ.result[0]._id}" class="item item-avatar" href="#">
+            <img ng-src="../img/x.png">
+            <div class="row">
+                <h2 class="col col-90">{{item.mark}}</h2>
+                <i class="col col-10 icon assertive ion-heart" ng-if="curActivityPersonRQ.result[0].like.indexOf(item.userId) >= 0"></i>
+                <button class="col col-10 button button-small button-balanced icon ion-thumbsup" ng-if="curActivityPersonRQ.result[0].like == undefined || curActivityPersonRQ.result[0].like.indexOf(item.userId) == -1" ng-click="chooseLike(item.userId)">
+                </button>
+            </div>
+        </ion-item>
     </ion-content>
 </ion-modal-view>

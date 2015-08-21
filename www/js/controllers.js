@@ -1008,6 +1008,14 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             PPConsole.debug("curActivityRQ change");
         });
 
+        $scope.curActivityPersonRQ = $scope.activityPersons.reactiveQuery({
+            activityId: $scope.activityId
+        });
+        $scope.curActivityPersonRQ.on("change", function() {
+            $scope.$apply();
+            PPConsole.debug("curActivityPersonRQ change");
+        });
+
         $timeout(function() {
             $ionicScrollDelegate.scrollBottom(true);
         }, 300);
@@ -1020,13 +1028,34 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         }).then(function(modal) {
             $scope.modalActivityLike = modal;
         });
-        
+
         $scope.editLike = function() {
             $scope.modalActivityLike.show();
         };
 
         $scope.closeLike = function() {
             $scope.modalActivityLike.hide();
+        };
+
+        $scope.chooseLike = function(targetUserId) {
+            var tmpPromiseResult = $scope.asteroid.call("chooseLike", $scope.activityId, targetUserId);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                if (r == '恭喜, 已加对方为好友!') {
+                    PPConsole.show(r);
+                }
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            })
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            });
         };
 
         $scope.sendMessage = function() {
