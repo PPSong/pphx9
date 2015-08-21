@@ -16,10 +16,13 @@
     </div>
     <ion-content class="has-header has-subheader">
         <ion-list>
-            <div class="list card" ng-repeat="item in otherActivitiesRQ.result | orderBy: '-start.$date'">
+            <div class="list card" ng-repeat="item in activitiesRQ.result | filter: {mine: mineFilter} |orderBy: '-start.$date'">
                 <div class="pp-image-drop-back" ng-click="clickActivity(item)">
                     <div class="row">
-                        <h3 class="pp-white-font">{{item.title}}</h3>
+                        <h3 class="pp-white-font col col-90">{{item.title}}</h3>
+                        <div class="col col-10">
+                            <span class="badge badge-assertive pp-badge-height" ng-hide="unreadCount(unreadGroupChatMessageCountsRQ.result, item._id) == 0">{{unreadCount(unreadGroupChatMessageCountsRQ.result, item._id)}}</span>
+                        </div>
                     </div>
                     <div class="row pp-space-big">
                         {{item.description}}
@@ -34,31 +37,10 @@
                             <br> {{item.end.$date | amDateFormat:'YYYYMMMMDo h:mm:ss a'}}
                             </span>
                         <div class="col col-10">
-                            <a class="button button-small button-balanced" ng-click="joinActivity(item)">Go</a>
+                            <a ng-if="curFilter == '活动广场'" class="button button-small button-balanced" ng-click="joinActivity(item)">Go</a>
+                            <a ng-if="curFilter == '已关注活动'" class="button button-small button-balanced" ng-click="enterActivity(item)">In</a>
                         </div>
                     </div>
-                    <!-- <img ng-src="{{item.image || 'img/activityImage.png'}}"> -->
-                    <!--  <img ng-src="{{getImg(item)}}">
-                    <div class="row">
-                        <div class="col">
-                            <h2>{{getCustomStatus(item)}}</h2>
-                        </div>
-                        <div class="col" ng-if="item.status == '待确认' && item.newMatchCount"><i class="icon assertive ion-heart"> {{item.newMatchCount}}</i></div>
-                        <div class="col" ng-if="item.status == '待回复' && item.targetUserId === usersRQ.result[0]._id"><i class="icon pp-black ion-ios-filing"> {{item.replyLeft}}</i></div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p>{{item.createrUserId === usersRQ.result[0]._id ? '发出' : '收到'}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col pp-black"><i class="icon ion-android-time"> <span am-time-ago="item.createdTime.$date" class="pp-black"></span></i></div>
-                        <div class="col"></div>
-                    </div>
-                    <div class="row" ng-if="item.status == '待回复' || item.status == '待确认'">
-                        <div class="col pp-black"><i class="icon ion-ios-stopwatch-outline pp-black"> <timer end-time="item.createdTime.$date + 3600000" interval="1000">{{hhours}}小时{{mminutes}}分{{sseconds}}秒</timer></i></div>
-                    </div> -->
-                    </a>
                 </div>
         </ion-list>
     </ion-content>

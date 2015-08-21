@@ -20,7 +20,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             $rootScope.$on('$ionicView.beforeEnter', function() {
                 $rootScope.hideTabs = false;
 
-                if ($state.current.name === 'tab.meet.searchSpecialPic' || $state.current.name === 'tab.meet.searchSpecialPicReply' || $state.current.name === 'tab.meet.searchSpecialPicConfirm' || $state.current.name === 'tab.friend.chat') {
+                if ($state.current.name === 'tab.meet.searchSpecialPic' || $state.current.name === 'tab.meet.searchSpecialPicReply' || $state.current.name === 'tab.meet.searchSpecialPicConfirm' || $state.current.name === 'tab.friend.chat' || $state.current.name === 'tab.activity.chat') {
                     $rootScope.hideTabs = true;
                 }
 
@@ -122,6 +122,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 'tab-activity': {
                     templateUrl: 'templates/tab-activity.html',
                     controller: 'ActivityCtrl'
+                }
+            }
+        })
+
+        .state('tab.activity.chat', {
+            url: '/chat/:activityId',
+            views: {
+                'tab-activity@tab': {
+                    templateUrl: 'templates/activityChat.html',
+                    controller: 'ActivityChatCtrl'
                 }
             }
         })

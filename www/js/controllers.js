@@ -44,16 +44,17 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             PPConsole.debug($scope.asteroid.ddp.readyState);
         });
         $scope.asteroid.on("logout", function(e) {
+            $scope.$apply();
             PPConsole.debug("logout");
             PPConsole.debug($scope.asteroid.ddp.readyState);
         });
 
         $scope.asteroid.subscribe("meets");
-        //$scope.asteroid.subscribe("otherActivities");
-        //$scope.asteroid.subscribe("myActivities");
+        $scope.asteroid.subscribe("otherActivities");
+        $scope.asteroid.subscribe("myActivities");
         $scope.asteroid.subscribe("messages");
         $scope.asteroid.subscribe("unreadMessageCount");
-        $scope.asteroid.subscribe("unreadCount");
+        $scope.asteroid.subscribe("unreadGroupChatMessageCount");
         $scope.asteroid.subscribe("friends");
 
         $scope.users = $scope.asteroid.getCollection("users");
@@ -74,8 +75,14 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         $scope.unreadMessageCountsRQ = $scope.unreadMessageCounts.reactiveQuery({});
         $scope.unreadMessageCountsRQ.on("change", function() {
             $scope.$apply();
-            console.log($scope.unreadMessageCountsRQ.result);
             PPConsole.debug("unreadMessageCounts change");
+        });
+
+        $scope.unreadGroupChatMessageCounts = $scope.asteroid.getCollection("unreadGroupChatMessageCounts");
+        $scope.unreadGroupChatMessageCountsRQ = $scope.unreadGroupChatMessageCounts.reactiveQuery({});
+        $scope.unreadGroupChatMessageCountsRQ.on("change", function() {
+            $scope.$apply();
+            PPConsole.debug("unreadGroupChatMessageCounts change");
         });
 
         $scope.friends = $scope.asteroid.getCollection("friends");
@@ -85,29 +92,12 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             PPConsole.debug("message change");
         });
 
-        // $scope.activities = $scope.asteroid.getCollection("activities");
-        // $scope.otherActivitiesRQ = $scope.activities.reactiveQuery(function(item) {
-        //     if ($scope.usersRQ.result[0]) {
-        //         if (item.persons) {
-        //             return item.persons.indexOf($scope.usersRQ.result[0]._id) < 0;
-        //         } else {
-        //             return true;
-        //         }
-        //     } else {
-        //         return false;
-        //     }
-        // });
-        // $scope.otherActivitiesRQ.on("change", function() {
-        //     $scope.$apply();
-        //     PPConsole.debug("otherActivities change");
-        // });
-        // $scope.myActivitiesRQ = $scope.activities.reactiveQuery({
-        //     persons: $scope.usersRQ.result[0] ? $scope.usersRQ.result[0]._id : 'empty',
-        // });
-        // $scope.myActivitiesRQ.on("change", function() {
-        //     $scope.$apply();
-        //     PPConsole.debug("myActivities change");
-        // });
+        $scope.activities = $scope.asteroid.getCollection("activities");
+        $scope.activitiesRQ = $scope.activities.reactiveQuery({});
+        $scope.activitiesRQ.on("change", function() {
+            $scope.$apply();
+            PPConsole.debug("activities change");
+        });
     })
     .controller('LoginCtrl', function($scope, $state, PPConsole) {
         $scope.loginUser = {};
@@ -178,6 +168,19 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         $scope.curTarget = {
             data: null
         }
+
+        $scope.curActivity = {
+            data: null
+        }
+
+        $scope.unreadCount = function(array, key) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i]._id == key) {
+                    return array[i].count;
+                }
+            }
+            return 0;
+        };
     })
     .controller('MeetCtrl', function($scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $cordovaCamera, $cordovaGeolocation, OptionService, BaiduNearByLocationService, PPConsole) {
         $ionicModal.fromTemplateUrl('templates/modalSpecialInfo.html', {
@@ -809,6 +812,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
     })
     .controller('ActivityCtrl', function($scope, $state, $ionicModal, $ionicLoading, PPConsole) {
         $scope.curFilter = '活动广场';
+        $scope.mineFilter = undefined;
 
         $ionicModal.fromTemplateUrl('templates/modalJoinActivity.html', {
             scope: $scope,
@@ -820,11 +824,19 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
 
         $scope.chooseFilter = function(filterString) {
             $scope.curFilter = filterString;
+            $scope.mineFilter = (filterString == '活动广场' ? undefined : true);
         }
 
         $scope.joinActivity = function(item) {
-            $scope.curActivity = item;
+            $scope.joiningActivity = item;
             $scope.modalJoinActivity.show();
+        }
+
+        $scope.enterActivity = function(item) {
+            $scope.curActivity.data = item;
+            $state.go('tab.activity.chat', {
+                activityId: item._id
+            });
         }
 
         $scope.cancelJoinActivity = function() {
@@ -835,7 +847,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $ionicLoading.show({
                 template: '处理中...'
             });
-            var tmpPromiseResult = $scope.asteroid.call("chooseMark", $scope.curActivity._id, mark);
+            var tmpPromiseResult = $scope.asteroid.call("chooseMark", $scope.joiningActivity._id, mark);
             tmpPromiseResult.result.then(function(r) {
                 PPConsole.debug("rr");
                 PPConsole.debug(r);
@@ -883,16 +895,6 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
                 PPConsole.err(e);
             });
         }
-
-        $scope.unreadCount = function(friendUserId) {
-            var tmpArray = $scope.unreadMessageCountsRQ.result;
-            for (var i = 0; i < tmpArray.length; i++) {
-                if (tmpArray[i]._id == friendUserId) {
-                    return tmpArray[i].count;
-                }
-            }
-            return 0;
-        };
 
         $scope.goToChat = function(item) {
             $state.go('tab.friend.chat', {
@@ -971,6 +973,69 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $state.go('tab.friend');
         }
     })
+    .controller('ActivityChatCtrl', function($scope, $state, $stateParams, $ionicScrollDelegate, $timeout, PPConsole) {
+        $scope.activityId = $stateParams.activityId;
+
+        $scope.asteroid.subscribe("groupChatMessages", $scope.activityId);
+
+        $scope.groupChatMessages = $scope.asteroid.getCollection("groupChatMessages");
+        $scope.groupChatMessagesRQ = $scope.groupChatMessages.reactiveQuery({});
+        $scope.groupChatMessagesRQ.on("change", function() {
+            $scope.$apply();
+            PPConsole.debug("groupChatMessages change");
+        });
+
+        $timeout(function() {
+            $ionicScrollDelegate.scrollBottom(true);
+        }, 300);
+
+        $scope.sendMessage = function() {
+            //防止在消息发送过程中重复发送或发送空消息
+            if (!$scope.inputMessage || $scope.sending) {
+                return;
+            }
+
+            $scope.sending = true;
+
+            var tmpPromiseResult = $scope.asteroid.call("sendGroupMessage", $scope.inputMessage, $scope.activityId);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $scope.inputMessage = '';
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            }).finally(function() {
+                $scope.sending = false;
+            });
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            });
+        };
+
+        $scope.myBack = function() {
+            var tmpPromiseResult = $scope.asteroid.call("updateLastChatTime", $scope.activityId);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            })
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            });
+            $state.go('tab.activity');
+        };
+    })
     .controller('SettingCtrl', function($scope, $state, $ionicLoading, $cordovaGeolocation, PPConsole) {
         $scope.friend = {
             username: ''
@@ -1000,7 +1065,6 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         }
 
         $scope.test = function() {
-            console.log('abc');
             $ionicLoading.show({
                 template: '处理中...'
             });

@@ -5,11 +5,11 @@
             <ion-nav-view name="tab-meet"></ion-nav-view>
         </ion-tab>
          <!-- meet Activity -->
-        <ion-tab title="活动" icon="ion-ios-pulse-strong" href="#/tab/activity">
+        <ion-tab title="活动" icon="ion-ios-pulse-strong" href="#/tab/activity" badge="unreadCount(unreadGroupChatMessageCountsRQ.result, 'total')" badge-style="badge-assertive">
             <ion-nav-view name="tab-activity"></ion-nav-view>
         </ion-tab>
         <!-- friend Tab -->
-        <ion-tab title="好友" icon="ion-ios-chatbubble" href="#/tab/friend" badge="unreadMessageCountsRQ.result[0].count" badge-style="badge-assertive">
+        <ion-tab title="好友" icon="ion-ios-chatbubble" href="#/tab/friend" badge="unreadCount(unreadMessageCountsRQ.result, 'total')" badge-style="badge-assertive">
             <ion-nav-view name="tab-friend"></ion-nav-view>
         </ion-tab>
         <!-- setting Tab -->

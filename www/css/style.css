@@ -108,11 +108,16 @@
 
 
 /* Empty. Add your own CSS if you like */
-.pp-center .scroll{
+
+.pp-center .scroll {
     text-align: center;
 }
 
-.pp-mark{
+.pp-badge-height {
+    height: 22px;
+}
+
+.pp-mark {
     width: 50px;
     height: 50px;
     display: inline-block;
@@ -121,15 +126,16 @@
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.16), 0 4px 20px 0 rgba(0, 0, 0, 0.12);
 }
 
-.pp-white-font{
+.pp-white-font {
     color: white;
 }
 
 .pp-image-drop-back {
     background-image: url('../img/activityImage.png');
+    background-repeat: no-repeat;
     display: block;
     height: 170px;
-    background-color: rgba(0,0,0,.4);
+    background-color: rgba(0, 0, 0, .4);
     background-blend-mode: multiply;
     color: white;
 }
