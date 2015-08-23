@@ -10,8 +10,8 @@
         <div class="pp-black pp-big-padding pp-text-center">
             请选择一个能在活动中代表你的标志
         </div>
-        <div class="pp-mark" ng-repeat="n in [].constructor(80) track by $index" ng-click="chooseMark($index)">
-            {{ $index }}
+        <div class="pp-mark" ng-repeat="n in [].constructor(80) track by $index" ng-click="chooseMark($index + 1)">
+            {{ "号:" + ppParseInt($index + 1) }}
         </div>
     </ion-content>
 </ion-modal-view>

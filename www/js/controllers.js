@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('starterCtrl', function($scope, $ionicLoading, PPConsole) {
         //var serverUrl = "hx9t.meteor.com";
-        var serverUrl = "192.168.1.54:3000";
+        var serverUrl = "192.168.1.9:3000";
         $scope.asteroid = new Asteroid(serverUrl);
         $scope.online = false;
 
@@ -838,6 +838,10 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $scope.modalJoinActivity = modal;
         });
 
+        $scope.ppParseInt = function(string) {
+            return parseInt(string);
+        };
+
         $scope.chooseFilter = function(filterString) {
             $scope.curFilter = filterString;
             $scope.mineFilter = (filterString == '活动广场' ? undefined : true);
@@ -994,7 +998,9 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         $scope.asteroid.subscribe("groupChatMessages", $scope.activityId);
 
         $scope.groupChatMessages = $scope.asteroid.getCollection("groupChatMessages");
-        $scope.groupChatMessagesRQ = $scope.groupChatMessages.reactiveQuery({});
+        $scope.groupChatMessagesRQ = $scope.groupChatMessages.reactiveQuery({
+            activityId: $scope.activityId
+        });
         $scope.groupChatMessagesRQ.on("change", function() {
             $scope.$apply();
             PPConsole.debug("groupChatMessages change");
