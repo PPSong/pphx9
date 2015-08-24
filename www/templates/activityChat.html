@@ -8,7 +8,15 @@
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content class="content-stable">
-        <div class="messages" ng-repeat="item in groupChatMessagesRQ.result | orderBy: 'createdTime'" ng-class="{other: item.fromUserId != usersRQ.result[0]._id}">
+        <p class="pp-click-history balanced" ng-click="getHistoryMessage()">点击查看前10条</p>
+        <div class="messages" ng-repeat="item in historyMessage | orderBy: 'createdTime.$date'" ng-class="{other: item.fromUserId != usersRQ.result[0]._id}">
+            <div class="message">
+                <span class="message">{{item.content}}</span>
+            </div>
+            <span>{{item.fromUserMark}}<span>-
+            <span am-time-ago="item.createdTime.$date"></span>
+        </div>
+        <div class="messages" ng-repeat="item in groupChatMessagesRQ.result | orderBy: 'createdTime.$date'" ng-class="{other: item.fromUserId != usersRQ.result[0]._id}">
             <div class="message">
                 <span class="message">{{item.content}}</span>
             </div>

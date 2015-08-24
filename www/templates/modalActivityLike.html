@@ -7,10 +7,10 @@
     </ion-header-bar>
     <ion-content padding="true" class="has-header padding">
         <ion-item ng-repeat="item in curActivityRQ.result[0].persons | filter: {userId: '!' + usersRQ.result[0]._id}" class="item item-avatar" href="#">
-            <img ng-src="../img/x.png">
+            <img ng-src="img/tbd.png">
             <div class="row">
                 <h2 class="col col-90">{{item.mark}}</h2>
-                <i class="col col-10 icon assertive ion-heart" ng-if="curActivityPersonRQ.result[0].like.indexOf(item.userId) >= 0"></i>
+                <i class="col col-10 icon assertive ion-heart" ng-if="curActivityPersonRQ.result[0].like.indexOf(item.userId) >= 0" ng-click="deChooseLike(item.userId)"></i>
                 <button class="col col-10 button button-small button-balanced icon ion-thumbsup" ng-if="curActivityPersonRQ.result[0].like == undefined || curActivityPersonRQ.result[0].like.indexOf(item.userId) == -1" ng-click="chooseLike(item.userId)">
                 </button>
             </div>

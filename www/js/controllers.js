@@ -995,16 +995,57 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('ActivityChatCtrl', function($scope, $state, $stateParams, $ionicScrollDelegate, $ionicModal, $timeout, PPConsole) {
         $scope.activityId = $stateParams.activityId;
 
-        $scope.asteroid.subscribe("groupChatMessages", $scope.activityId);
+        $scope.historyMessage = [];
+        $scope.historyMessageTimeStamp;
 
-        $scope.groupChatMessages = $scope.asteroid.getCollection("groupChatMessages");
-        $scope.groupChatMessagesRQ = $scope.groupChatMessages.reactiveQuery({
-            activityId: $scope.activityId
+        var tmpPromiseResult = $scope.asteroid.call("getGroupMessageTimeStamp", $scope.activityId);
+        tmpPromiseResult.result.then(function(r) {
+            PPConsole.debug("rr");
+            PPConsole.debug(r);
+            $scope.historyMessageTimeStamp = r;
+            $scope.groupChatMessagesHandle = $scope.asteroid.subscribe("groupChatMessages", $scope.activityId, r);
+            $scope.groupChatMessages = $scope.asteroid.getCollection("groupChatMessages");
+            $scope.groupChatMessagesRQ = $scope.groupChatMessages.reactiveQuery({});
+            $scope.groupChatMessagesRQ.on("change", function() {
+                $scope.$apply();
+                PPConsole.debug("groupChatMessages change");
+            });
+        }, function(e) {
+            PPConsole.debug("re");
+            PPConsole.err(e);
+        })
+        tmpPromiseResult.updated.then(function(r) {
+            PPConsole.debug("ur");
+            PPConsole.debug(r)
+        }, function(e) {
+            PPConsole.debug("ue");
+            PPConsole.err(e);
         });
-        $scope.groupChatMessagesRQ.on("change", function() {
-            $scope.$apply();
-            PPConsole.debug("groupChatMessages change");
-        });
+
+        $scope.getHistoryMessage = function() {
+            var tmpPromiseResult = $scope.asteroid.call("getHistoryMessage", $scope.activityId, $scope.historyMessageTimeStamp);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+                $scope.historyMessage = $scope.historyMessage.concat(r);
+                $scope.$apply();
+                if (r.length > 0) {
+                    $scope.historyMessageTimeStamp = r[r.length - 1].createdTime.$date;
+                } else {
+                    $scope.historyMessageTimeStamp = 0;
+                }
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            })
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            });
+        }
 
         $scope.curActivityRQ = $scope.activities.reactiveQuery({
             _id: $scope.activityId
@@ -1042,6 +1083,24 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
         $scope.closeLike = function() {
             $scope.modalActivityLike.hide();
         };
+
+        $scope.deChooseLike = function(targetUserId) {
+            var tmpPromiseResult = $scope.asteroid.call("deChooseLike", $scope.activityId, targetUserId);
+            tmpPromiseResult.result.then(function(r) {
+                PPConsole.debug("rr");
+                PPConsole.debug(r);
+            }, function(e) {
+                PPConsole.debug("re");
+                PPConsole.err(e);
+            })
+            tmpPromiseResult.updated.then(function(r) {
+                PPConsole.debug("ur");
+                PPConsole.debug(r)
+            }, function(e) {
+                PPConsole.debug("ue");
+                PPConsole.err(e);
+            });
+        }
 
         $scope.chooseLike = function(targetUserId) {
             var tmpPromiseResult = $scope.asteroid.call("chooseLike", $scope.activityId, targetUserId);
@@ -1097,6 +1156,7 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             tmpPromiseResult.result.then(function(r) {
                 PPConsole.debug("rr");
                 PPConsole.debug(r);
+                $scope.groupChatMessagesHandle.stop();
             }, function(e) {
                 PPConsole.debug("re");
                 PPConsole.err(e);

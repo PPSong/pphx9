@@ -109,6 +109,10 @@
 
 /* Empty. Add your own CSS if you like */
 
+.pp-click-history {
+    text-align: center;
+}
+
 .pp-center .scroll {
     text-align: center;
 }

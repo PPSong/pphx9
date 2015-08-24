@@ -23,8 +23,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 if ($state.current.name === 'tab.meet.searchSpecialPic' || $state.current.name === 'tab.meet.searchSpecialPicReply' || $state.current.name === 'tab.meet.searchSpecialPicConfirm' || $state.current.name === 'tab.friend.chat' || $state.current.name === 'tab.activity.chat') {
                     $rootScope.hideTabs = true;
                 }
-
-                if ($state.current.name == 'tab.friend.chat') {
+ 
+                if ($state.current.name == 'tab.friend.chat' || $state.current.name == 'tab.activity.chat') {
                     //避免在浏览器测试错误
                     if (typeof cordova != "undefined") {
                         cordova.plugins.Keyboard.disableScroll(true);
