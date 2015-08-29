@@ -838,10 +838,6 @@ angular.module('starter.controllers', ['angularMoment', 'timer'])
             $scope.modalJoinActivity = modal;
         });
 
-        $scope.ppParseInt = function(string) {
-            return parseInt(string);
-        };
-
         $scope.chooseFilter = function(filterString) {
             $scope.curFilter = filterString;
             $scope.mineFilter = (filterString == '活动广场' ? undefined : true);
