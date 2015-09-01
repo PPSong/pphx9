@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['angularMoment', 'timer'])
     .controller('starterCtrl', function($scope, $ionicLoading, PPConsole) {
-        var serverUrl = "hx9t.meteor.com";
-        //var serverUrl = "192.168.1.9:3000";
+        //var serverUrl = "hx9t.meteor.com";
+        var serverUrl = "192.168.1.9:3000";
         $scope.asteroid = new Asteroid(serverUrl);
         $scope.online = false;
 
