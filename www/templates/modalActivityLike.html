@@ -7,7 +7,7 @@
     </ion-header-bar>
     <ion-content padding="true" class="has-header padding">
         <ion-item ng-repeat="item in curActivityRQ.result[0].persons | filter: {userId: '!' + usersRQ.result[0]._id}" class="item item-avatar" href="#">
-            <img ng-src="img/tbd.png">
+            <img ng-src="{{'img/' + item.mark + '.png'}}">
             <div class="row" ng-if="curActivityPersonRQ.result[0].like.indexOf(item.userId) >= 0">
                 <h2 class="col col-60">{{item.mark}}</h2>
                 <i class="col col-30 icon assertive ion-heart"></i>
